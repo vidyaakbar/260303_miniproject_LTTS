@@ -15,7 +15,7 @@ except ImportError:
 ### FUNCTIONS ###
 
 
-def randomInt(bits):  # Returns a strong random integer of "bits" bits
+def randomint(bits):  # Returns a strong random integer of "bits" bits
     try:
         num = s.randbits(bits)
         return num
@@ -23,7 +23,7 @@ def randomInt(bits):  # Returns a strong random integer of "bits" bits
         print("Error... please try again.")
 
 
-def randomStr(x):  # Returns a strong random string of length "x" of characters selected from "dictionary"
+def randomstr(x):  # Returns a strong random string of length "x" of characters selected from "dictionary"
     try:
         dictionary = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_+=@[](),./#~!£$%^&*:;"
         string = ""
@@ -43,16 +43,16 @@ def gen_sha3512_hash(x):  # Returns the SHA3-512 hash of "inp"
         print("Error... please try again.")
 
 
-def genSalt():  # Returns a strongly random 512 bit salt
+def gensalt():  # Returns a strongly random 512 bit salt
     try:
-        randomness = str(randomInt(4096)) + randomStr(4096)
+        randomness = str(randomint(4096)) + randomstr(4096)
         salt = gen_sha3512_hash(randomness)
         return salt
     except:
         print("Error... please try again.")
 
 
-def addUser(username, password):  # Hashes, salts, and stores credentials in their respective files#
+def adduser(username, password):  # Hashes, salts, and stores credentials in their respective files#
     try:
         usernames = []
 
@@ -65,7 +65,7 @@ def addUser(username, password):  # Hashes, salts, and stores credentials in the
         s = open("salt.db", "a")
         u = open("user.db", "a")
 
-        salt = genSalt()  # Generate hashes to store
+        salt = gensalt()  # Generate hashes to store
         userHash = gen_sha3512_hash(username)
         passSalt = password + salt
         passHash = gen_sha3512_hash(passSalt)
@@ -78,18 +78,13 @@ def addUser(username, password):  # Hashes, salts, and stores credentials in the
 
                 salt = ""  # Clear variables
                 userHash = ""
-                passSalt = ""
+
                 passHash = ""
 
-        if available == True:
+        if available:
             p.write(passHash + "\n")  # Write values to files
             s.write(salt + "\n")
             u.write(userHash + "\n")
-
-            salt = ""  # Clear variables
-            userHash = ""
-            passSalt = ""
-            passHash = ""
 
             p.close()  # Close files
             s.close()
@@ -97,16 +92,11 @@ def addUser(username, password):  # Hashes, salts, and stores credentials in the
 
             print("Your credentials have been added!\n")
 
-        elif available == False:
-            print("That username is taken! Please try again...\n")
+        elif not available:
+            print("Looks the username is taken or you have given a empty input!! Please try again...\n")
 
         else:
             print("Error! Please try again...\n")
-
-        salt = ""  # Clear variables
-        userHash = ""
-        passSalt = ""
-        passHash = ""
 
         p.close()  # Close files
         s.close()
@@ -115,8 +105,7 @@ def addUser(username, password):  # Hashes, salts, and stores credentials in the
         print("Error... please try again.")
 
 
-def login(username,
-          password):  # Verifies the user entered "username" and "password", and prints "Logged in!" if they're in the database
+def login(username, password):  # Verifies the user entered "username" and "password", and prints "Logged in!" if they're in the database
     # Test Credentials: "testUser", "testPass"
 
     try:
@@ -141,39 +130,29 @@ def login(username,
 
         # Generate "username" hash for comparison & lookup
         userHash = gen_sha3512_hash(username)
-        salt = ""
         passHash = ""
         location = 0  # Location of credentials in list
         found = False
 
-        go = True
-        while go:
+        goo = True
+        while goo:
             for i in range(len(usernames)):  # Look up location of credentials
                 if usernames[i] == userHash:
                     location = i
                     found = True
-                    go = False
-            go = False
+            goo = False
 
-        if found == True:  # Look up the rest of the credentials
+        if found:  # Look up the rest of the credentials
             salt = salts[location]
             passSalt = password + salt
             passHash = gen_sha3512_hash(passSalt)
 
         # Verify the credentials and return True if correct
         if userHash == usernames[location] and passHash == passwords[location]:
-            print("Logged in!\n")
+            print("You have successfully Logged in!\n")
         elif userHash != usernames[location] or passHash != passwords:
             print("Credentials not found! Please try again...\n")
 
-        usernames = []  # Clear credential lists
-        passwords = []
-        salts = []
-
-        userHash = ""
-        salt = ""
-        passHash = ""
-        location = 0
     except:
         print("Error... please try again.")
 
@@ -184,13 +163,14 @@ def login(username,
 
 go = True
 while go:
+    print("\n***********WELCOME*************\n")
     try:
-        option = int(input("Enter 1 to sign up\nEnter 2 to login\nEnter 3 to exit\n: "))
+        option = int(input("Enter 1 to sign up\nEnter 2 to login\nEnter 3 to exit\nPlease enter your option here ----> "))
 
         if option == 1:
             username = input("\nPlease enter a username: ")
             password = input("Please enter a password: ")
-            addUser(username, password)
+            adduser(username, password)
 
         elif option == 2:
             username = input("\nPlease enter your username: ")
@@ -198,8 +178,13 @@ while go:
             login(username, password)
 
         elif option == 3:
+            print("Thank You")
             go = False
+
+        else:
+            print("error.. please enter proper option.\n")
+
     except:
-        print("Error... please try again.\n")
+        print("Error... please enter proper option.\n")
 
 ### END MAIN PROGRAM ###

@@ -1,5 +1,11 @@
 # Password Manager
 
-This is a secure password management system based on Python. Although the system is relatively secure, I am by no means a security professional so I would be careful when using this is production software.
+This is a simple password management system based on Python. 
 
-*This project is designed as a proof of concept. I would be careful when using this in high-security environments.
+This project is on checking about the sign in account and logging in.
+
+    If the user is new he has to sign in first and then login
+    He can check if he has a account by logging in with his username and password.
+    If he do not have account, it will ask to sign in first.
+    
+
