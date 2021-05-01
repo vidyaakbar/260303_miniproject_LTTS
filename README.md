@@ -1,1 +1,1 @@
-# 260303_miniproject_LTTS
+# 260303_python_miniproject_LTTS
